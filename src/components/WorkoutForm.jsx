@@ -1,121 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import { Save } from 'lucide-react';
 
-const WorkoutForm = ({ initialData, onSubmit, isSubmitting, pageTitle, actionText }) => {
-  const [formData, setFormData] = useState({ name: '', date: '', notes: '' });
+export default function WorkoutForm({ onSubmit, initialData = {}, currentUser }) {
+  const [workoutName, setWorkoutName] = useState('');
+  const [date, setDate] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const [error, setError] = useState('');
+
+  const isEditMode = Boolean(initialData && initialData.id);
 
   useEffect(() => {
-    const defaultDate = new Date().toISOString().split('T')[0];
-    setFormData({
-      name: initialData?.name || '',
-      date: initialData?.date ? new Date(initialData.date).toISOString().split('T')[0] : defaultDate,
-      notes: initialData?.notes || '',
-    });
-  }, [initialData]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    if (isEditMode) {
+      setWorkoutName(initialData.workout_name || '');
+      setDate(initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : '');
+      setNotes(initialData.notes || '');
+    }
+  }, [initialData, isEditMode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit(formData);
+    setError(''); 
+
+    if (!workoutName.trim() || !date) {
+      setError('Workout Name and Date are required.');
+      return;
     }
+    
+    if (!currentUser || !currentUser.id) {
+        setError('You must be logged in to save a workout.');
+        return;
+    }
+    
+    const workoutData = {
+      ...initialData, 
+      workout_name: workoutName,
+      date,
+      notes,
+      user_id: currentUser.id,
+    };
+
+    onSubmit(workoutData);
   };
 
   return (
-    <div className="w-full">
-      <h2 className="text-3xl font-bold text-slate-100 mb-6">{pageTitle}</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1">Workout Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full bg-slate-800 border-slate-700 rounded-md p-3 text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-            placeholder="e.g., Morning Run"
-          />
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+      {/* Error display */}
+      {error && (
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+          <p className="font-bold">Error</p>
+          <p>{error}</p>
         </div>
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium text-slate-300 mb-1">Date</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-            className="w-full bg-slate-800 border-slate-700 rounded-md p-3 text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-          />
-        </div>
-        <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-slate-300 mb-1">Notes</label>
-          <textarea
-            id="notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            rows="4"
-            className="w-full bg-slate-800 border-slate-700 rounded-md p-3 text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-            placeholder="Any details about your session..."
-          ></textarea>
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? 'Saving...' : (
-              <>
-                <Save size={18} /> {actionText}
-              </>
-            )}
-          </button>
-        </div>
-      </form>
-    </div>
+      )}
+
+      {/* Workout Name Field */}
+      <div>
+        <label htmlFor="workoutName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Workout Name
+        </label>
+        <input
+          id="workoutName"
+          type="text"
+          value={workoutName}
+          onChange={(e) => setWorkoutName(e.target.value)}
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="e.g., Morning Run, Leg Day"
+          required
+        />
+      </div>
+
+      {/* Date Field */}
+      <div>
+        <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Date
+        </label>
+        <input
+          id="date"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          required
+        />
+      </div>
+
+      {/* Notes Field */}
+      <div>
+        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Notes (Optional)
+        </label>
+        <textarea
+          id="notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows="4"
+          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="Any details about your workout, how you felt, etc."
+        ></textarea>
+      </div>
+
+      {/* Submit Button */}
+      <div>
+        <button 
+          type="submit" 
+          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+        >
+          {isEditMode ? 'Update Workout' : 'Create Workout'}
+        </button>
+      </div>
+    </form>
   );
 };
-
-
-export default function App() {
-    const [submitting, setSubmitting] = useState(false);
-    const editData = { name: 'Leg Day', date: '2025-06-23', notes: 'Squats, deadlifts, and lunges.' };
-
-    const handleFormSubmit = (data) => {
-        setSubmitting(true);
-        console.log("Form Data Submitted:", data);
-        setTimeout(() => {
-            alert(`Submitted data: ${JSON.stringify(data, null, 2)}`);
-            setSubmitting(false);
-        }, 1000);
-    };
-
-    return (
-        <div className="bg-slate-900 min-h-screen p-8 font-sans">
-            <div className="max-w-2xl mx-auto space-y-12">
-                <WorkoutForm
-                    onSubmit={handleFormSubmit}
-                    isSubmitting={submitting}
-                    pageTitle="Log a New Workout"
-                    actionText="Create Workout"
-                />
-                <hr className="border-slate-700"/>
-                <WorkoutForm
-                    initialData={editData}
-                    onSubmit={handleFormSubmit}
-                    isSubmitting={submitting}
-                    pageTitle="Edit Workout"
-                    actionText="Save Changes"
-                />
-            </div>
-        </div>
-    );
-}

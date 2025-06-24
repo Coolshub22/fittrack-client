@@ -1,65 +1,72 @@
 import React from 'react';
-import { Calendar, Trash2, ChevronRight } from 'lucide-react';
+import { Calendar, FileText, Trash2, Edit } from 'lucide-react';
 
-const WorkoutCard = ({ workout, onSelect, onDelete }) => {
-  const handleDeleteClick = (e) => {
-    e.stopPropagation();
-    if (onDelete) {
-      onDelete(workout.id);
+export default function WorkoutCard({ workout, onSelect, onDelete }) {
+  const { id, workout_name, date, notes } = workout;
+
+  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const handleDelete = (e) => {
+    e.stopPropagation(); 
+    if (window.confirm('Are you sure you want to delete this workout? This action cannot be undone.')) {
+        onDelete(id);
     }
   };
+  
+  const handleEdit = (e) => {
+      e.stopPropagation(); // Prevent the card's onSelect from firing
+      onSelect(id, true); // The 'true' flag indicates an edit action
+  }
 
   return (
     <div 
-      className="bg-slate-800 rounded-lg p-4 flex justify-between items-center transition-all duration-200 hover:bg-slate-700/50 hover:ring-2 hover:ring-sky-500 cursor-pointer"
-      onClick={() => onSelect(workout.id)}
+      onClick={() => onSelect(id, false)} // The 'false' flag indicates a view action
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden flex flex-col h-full"
+      role="button"
+      tabIndex="0"
+      aria-label={`View details for ${workout_name}`}
     >
-      <div>
-        <h3 className="text-lg font-bold text-slate-100">{workout.name}</h3>
-        <p className="text-sm text-slate-400 flex items-center gap-2 mt-1">
-          <Calendar size={14} />
-          {new Date(workout.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
-      </div>
-      <div className="flex items-center gap-2">
-        <button 
-          onClick={handleDeleteClick} 
-          className="text-rose-500 hover:text-rose-400 p-2 rounded-full bg-slate-700/50 hover:bg-slate-700"
-          aria-label={`Delete workout ${workout.name}`}
-        >
-          <Trash2 size={18} />
-        </button>
-        <div className="text-sky-400">
-             <ChevronRight size={20} />
+      <div className="p-6 flex-grow flex flex-col">
+        {/* Card Header */}
+        <div className="flex justify-between items-start mb-2">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white pr-2">{workout_name}</h3>
+            <div className="flex space-x-2 flex-shrink-0">
+                <button 
+                  onClick={handleEdit} 
+                  className="p-1 text-blue-500 hover:text-blue-700 rounded-full hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors" 
+                  aria-label={`Edit ${workout_name}`}
+                >
+                    <Edit size={18}/>
+                </button>
+                <button 
+                  onClick={handleDelete} 
+                  className="p-1 text-red-500 hover:text-red-700 rounded-full hover:bg-red-100 dark:hover:bg-gray-700 transition-colors" 
+                  aria-label={`Delete ${workout_name}`}
+                >
+                    <Trash2 size={18}/>
+                </button>
+            </div>
+        </div>
+
+        {/* Card Body */}
+        <div className="flex-grow">
+            <div className="flex items-center text-gray-600 dark:text-gray-400 mb-4 text-sm">
+              <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span>{formattedDate}</span>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 line-clamp-3">
+                <FileText 
+                  className="inline h-4 w-4 mr-2 flex-shrink-0" 
+                  style={{verticalAlign: 'text-top'}}
+                />
+                {notes || "No notes for this workout."}
+            </p>
         </div>
       </div>
     </div>
   );
 };
-
-export default function App() {
-  const sampleWorkout = {
-    id: 1,
-    name: 'Full Body Strength',
-    date: '2025-06-21',
-    notes: 'Focused on compound lifts. Felt strong.',
-  };
-
-  const handleSelect = (id) => {
-    alert(`Selected workout with ID: ${id}`);
-  };
-
-  const handleDelete = (id) => {
-    alert(`Attempting to delete workout with ID: ${id}`);
-  };
-
-  return (
-    <div className="bg-slate-900 min-h-screen p-8 font-sans">
-      <div className="max-w-md mx-auto">
-         <h1 className="text-2xl font-bold text-white mb-6 text-center">Workout Card Demo</h1>
-         <WorkoutCard workout={sampleWorkout} onSelect={handleSelect} onDelete={handleDelete} />
-      </div>
-    </div>
-  );
-}
-
