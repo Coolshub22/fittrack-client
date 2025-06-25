@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -26,9 +26,10 @@ export default function Navbar() {
   };
 
   const navLinkClass = ({ isActive }) =>
-    isActive
-      ? 'text-sky-500 font-semibold transition-colors duration-200'
-      : 'text-gray-100 hover:text-sky-400 transition-colors duration-200';
+    (isActive
+      ? 'text-sky-400 font-semibold'
+      : 'text-white hover:text-sky-400') +
+    ' block transition-colors duration-200';
 
   return (
     <header className="w-full bg-gray-900 border-b border-gray-800 py-4 shadow">
@@ -91,30 +92,21 @@ export default function Navbar() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-gray-800 px-4 py-3 space-y-3">
-          {publicNavItems.map((item, i) => (
-            <NavLink
-              to={item.path}
-              key={'mobile-' + item.path + i}
-              className={navLinkClass}
-              onClick={toggleMobileMenu}
-            >
-              {item.name}
-            </NavLink>
-          ))}
-          {isLoggedIn &&
-            authenticatedNavItems.map((item, i) => (
-              <NavLink
-                to={item.path}
-                key={'mobile-' + item.path + i}
-                className={navLinkClass}
-                onClick={toggleMobileMenu}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-
-          <hr className="border-gray-700" />
+        <div className="lg:hidden bg-gray-800 px-4 py-3 space-y-4">
+          {isLoggedIn && (
+            <div className="flex flex-col space-y-3">
+              {authenticatedNavItems.map((item, i) => (
+                <NavLink
+                  to={item.path}
+                  key={'mobile-' + item.path + i}
+                  className={navLinkClass}
+                  onClick={toggleMobileMenu}
+                >
+                  {item.name}
+                </NavLink>
+              ))}
+            </div>
+          )}
 
           {!isLoggedIn ? (
             <>
