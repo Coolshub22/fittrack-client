@@ -3,26 +3,7 @@ import { PlusCircle, Calendar, FileText, Trash2, Edit, ChevronDown, Clock, Dumbb
 // Using the api.js file you provided earlier.
 import * as api from './api';
 
-function ExerciseList({ workoutId }) {
-  const [exercises, setExercises] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        setIsLoading(true);
-        const allExercises = await api.getExercises();
-        const relevantExercises = allExercises.filter(ex => ex.workout_id === workoutId);
-        setExercises(relevantExercises);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load exercises for this workout.");
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     fetchExercises();
   }, [workoutId]);
@@ -121,22 +102,17 @@ export default function WorkoutsPage({ navigate, currentUser }) {
   if (loading) return <p className="text-center text-lg mt-8">Loading your workouts...</p>;
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Your Workouts</h1>
-        <div className="flex items-center gap-4 w-full sm:w-auto">
-            <input 
-              type="text"
-              placeholder="Search workouts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 w-full sm:w-auto"
-            />
-            <button onClick={() => navigate('/workouts/new')} className="flex-shrink-0 flex items-center bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700">
-                <PlusCircle className="mr-2 h-5 w-5" />
-                New Workout
-            </button>
-        </div>
+
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-extrabold text-text-primary">Your Workouts</h1>
+        <button
+          onClick={() => navigate('/workouts/new')}
+          className="flex items-center gap-2 bg-accent hover:opacity-90 text-background font-bold py-2 px-4 rounded-lg transition-opacity duration-200"
+        >
+          <Plus size={20} /> New Workout
+        </button>
+
       </div>
       
       {error && <p className="text-center text-red-500 bg-red-100 p-3 rounded-md">{error}</p>}
