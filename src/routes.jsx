@@ -23,7 +23,8 @@ export const myRouter = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
-      {element: <ProtectedRoute />,
+      {
+        element: <ProtectedRoute />,
         children: [
           { path: 'dashboard', element: <DashboardPage /> },
           { path: 'workouts', element: <WorkoutsPage /> },
@@ -32,10 +33,9 @@ export const myRouter = createBrowserRouter([
           { path: 'workouts/:id', element: <WorkoutDetailPage /> },
           { path: 'profile', element: <ProfilePage /> },
           { path: 'progress', element: <ProgressPage /> },
-          { path: '*', element: <NotFoundPage /> },
-        ]
-      }
-      
+        ],
+      },
+      { path: '*', element: <NotFoundPage /> },      
     ],
   },
 ]);
