@@ -10,8 +10,6 @@ import WorkoutsPage from './pages/WorkoutsPage.jsx';
 import WorkoutDetailPage from './pages/WorkoutDetailPage.jsx';
 import CreateWorkoutPage from './pages/CreateWorkoutPage.jsx';
 import EditWorkoutPage from './pages/EditWorkoutPage.jsx';
-import CreateExercisePage from './pages/CreateExercisePage.jsx';
-import EditExercisePage from './pages/EditExercisePage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import ProgressPage from './pages/ProgressPage.jsx';
 
@@ -25,6 +23,7 @@ export const myRouter = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+<<<<<<< HEAD
       {element: <ProtectedRoute />,
         children: [
           { path: 'dashboard', element: <DashboardPage /> },
@@ -40,6 +39,16 @@ export const myRouter = createBrowserRouter([
         ]
       }
       
+=======
+      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'workouts', element: <WorkoutsPage /> },
+      { path: 'workouts/new', element: <CreateWorkoutPage /> },
+      { path: 'workouts/edit/:id', element: <EditWorkoutPage /> },
+      { path: 'workouts/:id', element: <WorkoutDetailPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'progress', element: <ProgressPage /> },
+      { path: '*', element: <NotFoundPage /> },
+>>>>>>> mwirigi
     ],
   },
 ]);
