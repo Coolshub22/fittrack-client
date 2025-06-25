@@ -8,7 +8,7 @@ function App() {
     <div className="min-h-screen bg-background text-primary">
       <Navbar />
       <main className="p-4">
-        <Outlet /> {/* Renders the current route's component */}
+        <Outlet />
       </main>
     </div>
   );
