@@ -23,7 +23,6 @@ export const myRouter = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
-<<<<<<< HEAD
       {element: <ProtectedRoute />,
         children: [
           { path: 'dashboard', element: <DashboardPage /> },
@@ -31,24 +30,12 @@ export const myRouter = createBrowserRouter([
           { path: 'workouts/new', element: <CreateWorkoutPage /> },
           { path: 'workouts/edit/:id', element: <EditWorkoutPage /> },
           { path: 'workouts/:id', element: <WorkoutDetailPage /> },
-          { path: 'exercises/new', element: <CreateExercisePage /> },
-          { path: 'exercises/edit/:id', element: <EditExercisePage /> },
           { path: 'profile', element: <ProfilePage /> },
           { path: 'progress', element: <ProgressPage /> },
           { path: '*', element: <NotFoundPage /> },
         ]
       }
       
-=======
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'workouts', element: <WorkoutsPage /> },
-      { path: 'workouts/new', element: <CreateWorkoutPage /> },
-      { path: 'workouts/edit/:id', element: <EditWorkoutPage /> },
-      { path: 'workouts/:id', element: <WorkoutDetailPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'progress', element: <ProgressPage /> },
-      { path: '*', element: <NotFoundPage /> },
->>>>>>> mwirigi
     ],
   },
 ]);
