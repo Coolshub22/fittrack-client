@@ -2,24 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Loader, Calendar, ChevronRight } from 'lucide-react';
 
-// --- MOCK API (Self-contained to resolve import error) ---
-// In your real application, this logic would live in `src/api/api.js`.
-const api = {
-  get: async (endpoint) => {
-    console.log(`API GET: ${endpoint}`);
-    if (endpoint === '/workouts') {
-      // Simulate a network delay
-      return new Promise(resolve => setTimeout(() => resolve({
-        data: [
-          { id: 1, name: 'Full Body Strength', date: '2025-06-21' },
-          { id: 2, name: 'Morning Cardio & Core', date: '2025-06-22' },
-          { id: 3, name: 'Leg Day', date: '2025-06-23' },
-        ]
-      }), 800));
-    }
-    return Promise.reject(new Error("Unknown API endpoint"));
-  },
-};
+
 
 // --- WORKOUT CARD COMPONENT (Self-contained to resolve import error) ---
 // In your real application, this would live in `src/components/WorkoutCard.jsx`.
@@ -121,7 +104,7 @@ const WorkoutsPage = () => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-extrabold text-text-primary">Your Workouts</h1>
         <button
-          onClick={() => navigate('/create-workout')}
+          onClick={() => navigate('/workouts/new')}
           className="flex items-center gap-2 bg-accent hover:opacity-90 text-background font-bold py-2 px-4 rounded-lg transition-opacity duration-200"
         >
           <Plus size={20} /> New Workout
