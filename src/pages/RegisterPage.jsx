@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import api from '../api/api';
-import login from './LoginPage';
+import { useAuth } from '../context/AuthContext';
 
 export default function RegisterPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
@@ -20,13 +21,15 @@ export default function RegisterPage() {
   setError('');
 
   try {
-    const res = await api.post('/register', formData); // <- fixed path
+    const res = await api.post('/register', formData);
+    console.log('Registered', redirect.data);
     const { access_token } = res.data;
 
     login(access_token);
     navigate('/dashboard');
 
   } catch (err) {
+    console.log('registration error', err.response?.data || err.message);
     const message =
       err.response?.data?.error || 'Registration failed. Try again.';
     setError(message);
