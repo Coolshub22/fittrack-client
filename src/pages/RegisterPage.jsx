@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import LoginPage from './LoginPage';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -15,20 +16,23 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    try {
-      const res = await api.post('/api/register', formData);
-      if (res.status === 201 || res.status === 200) {
-        navigate('/login');
-      }
-    } catch (err) {
-      const message =
-        err.response?.data?.message || 'Registration failed. Try again.';
-      setError(message);
-    }
-  };
+  try {
+    const res = await api.post('/register', formData); // <- fixed path
+    const { access_token } = res.data;
+
+    login(access_token);
+    navigate('/dashboard');
+
+  } catch (err) {
+    const message =
+      err.response?.data?.error || 'Registration failed. Try again.';
+    setError(message);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
@@ -40,10 +44,10 @@ export default function RegisterPage() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <input
           type="text"
-          name="name"
-          placeholder="Name"
+          name="username"
+          placeholder="Username"
           className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
-          value={formData.name}
+          value={formData.username}
           onChange={handleChange}
           required
         />

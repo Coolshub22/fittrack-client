@@ -6,7 +6,7 @@ import api from '../api/api'; // <-- Axios instance
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
 
   const handleChange = (e) =>
@@ -18,9 +18,9 @@ export default function LoginPage() {
 
     try {
       const res = await api.post('/api/login', formData);
-      const { token } = res.data;
+      const { access_token } = res.data;
 
-      login(token);
+      login(access_token);
       navigate('/dashboard');
     } catch (err) {
       const message =
@@ -38,11 +38,11 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold mb-6">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
+          type="text"
+          name="username"
+          placeholder="Username"
           className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
-          value={formData.email}
+          value={formData.username}
           onChange={handleChange}
           required
         />
