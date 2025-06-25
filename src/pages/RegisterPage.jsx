@@ -12,6 +12,7 @@ export default function RegisterPage() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -63,8 +64,9 @@ export default function RegisterPage() {
           onChange={handleChange}
           required
         />
+        <div className='relative mb-6'>
         <input
-          type="password"
+          type={showPassword ? 'text' : "password"}  // dynamic input type
           name="password"
           placeholder="Password"
           className="w-full mb-6 p-2 rounded bg-gray-700 text-white"
@@ -72,6 +74,14 @@ export default function RegisterPage() {
           onChange={handleChange}
           required
         />
+        <button
+        type='button'
+        onClick={() => setShowPassword(!showPassword)}  // toggle visiblity
+        className='absolute right-2 top-2 text -sm text-sky-400 hover:text-sky-300'
+        >
+          {showPassword ? 'Hide' : 'Show'}
+        </button>
+        </div>
         <button
           type="submit"
           className="w-full bg-sky-500 py-2 rounded hover:bg-sky-600"
