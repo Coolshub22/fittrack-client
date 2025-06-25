@@ -1,26 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../api/api'; // <-- Axios instance
 
 export default function LoginPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    localStorage.setItem('authToken', '123'); // Simulate login
-    window.dispatchEvent(new Event("storage")); // ← Trigger Navbar update
-    navigate('/dashboard'); // Redirect to dashboard
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const res = await api.post('/login', formData);
+      const { access_token } = res.data;
+
+      login(access_token);
+      navigate('/dashboard');
+    } catch (err) {
+      const message =
+        err.response?.data?.message || 'Login failed. Check credentials.';
+      setError(message);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md"
+      >
         <h1 className="text-2xl font-bold mb-6">Login</h1>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          className="w-full mb-4 p-2 rounded bg-gray-700 text-white"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="w-full mb-6 p-2 rounded bg-gray-700 text-white"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
         <button
-          onClick={handleLogin}
-          className="w-full bg-accent text-white py-2 rounded hover:bg-opacity-90 transition"
+          type="submit"
+          className="w-full bg-sky-500 py-2 rounded hover:bg-sky-600"
         >
-          Login as Test User
+          Login
         </button>
-      </div>
+      </form>
     </div>
   );
 }

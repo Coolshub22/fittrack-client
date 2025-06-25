@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const authenticatedNavItems = [
   { path: '/dashboard', name: 'Dashboard' },
@@ -12,36 +13,17 @@ const publicNavItems = [];
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
-
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem('authToken');
-      setIsLoggedIn(!!token);
-    };
-
-    checkAuth();
-
-    // Listen to storage changes (e.g., login in another tab)
-    window.addEventListener('storage', checkAuth);
-
-    return () => {
-      window.removeEventListener('storage', checkAuth);
-    };
-  }, []);
-
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    setIsLoggedIn(false);
+    logout();
     navigate('/');
-  }
+  };
 
   const navLinkClass = ({ isActive }) =>
     isActive
@@ -51,12 +33,10 @@ export default function Navbar() {
   return (
     <header className="w-full bg-gray-900 border-b border-gray-800 py-4 shadow">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4">
-        {/* Logo */}
         <NavLink to="/" className="text-white text-2xl font-bold">
           FitTrack
         </NavLink>
 
-        {/* Desktop Navigation */}
         <div className="hidden lg:flex flex-grow justify-center space-x-6">
           {publicNavItems.map((item, i) => (
             <NavLink to={item.path} key={item.path + i} className={navLinkClass}>
@@ -71,7 +51,6 @@ export default function Navbar() {
             ))}
         </div>
 
-        {/* Auth Buttons (Desktop) */}
         <div className="hidden lg:flex items-center space-x-4">
           {!isLoggedIn ? (
             <>
@@ -98,7 +77,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="lg:hidden">
           <button onClick={toggleMobileMenu} className="text-gray-100">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +90,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-gray-800 px-4 py-3 space-y-3">
           {publicNavItems.map((item, i) => (
