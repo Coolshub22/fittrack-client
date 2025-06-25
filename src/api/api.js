@@ -1,43 +1,38 @@
-import axios from 'axios';
+// src/api/api.js
+const API_BASE_URL = 'http://localhost:9000';
 
-/**
- * Creates a configured Axios instance for API communication.
- */
-const api = axios.create({
-  /**
-   * The base URL for all API requests.
-   * It's configured to use an environment variable (VITE_API_URL), 
-   * which is the standard and most secure way to handle API endpoints.
-   * A fallback to localhost:5000 is provided for local development.
-   */
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000',
-  headers: {
+const request = async (endpoint, options = {}) => {
+  const url = `${API_BASE_URL}${endpoint}`;
+  const headers = {
     'Content-Type': 'application/json',
-  },
-});
+    ...options.headers,
+  };
 
-/**
- * Axios Request Interceptor
- * * This function automatically attaches the user's authentication token 
- * to the `Authorization` header for every outgoing request.
- * This is crucial for accessing protected backend routes.
- */
-api.interceptors.request.use(
-  (config) => {
-    // Retrieve the token from localStorage (or your preferred storage)
-    const token = localStorage.getItem('authToken'); 
-    
-    if (token) {
-      // If the token exists, add it to the request headers
-      config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const response = await fetch(url, { ...options, headers });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: `HTTP error! Status: ${response.status}` }));
+      throw new Error(errorData.error);
     }
-    
-    return config;
-  },
-  (error) => {
-    // Handle any errors that occur during request setup
-    return Promise.reject(error);
+    return response.json();
+  } catch (error) {
+    console.error(`API request failed for endpoint ${endpoint}:`, error);
+    throw error;
   }
-);
+};
 
-export default api;
+export const createUser = (userData) => request('/users', { method: 'POST', body: JSON.stringify(userData) });
+export const getUsers = () => request('/users');
+export const getUser = (userId) => request(`/users/${userId}`);
+export const updateUser = (userId, userData) => request(`/users/${userId}`, { method: 'PATCH', body: JSON.stringify(userData) });
+export const deleteUser = (userId) => request(`/users/${userId}`, { method: 'DELETE' });
+export const createWorkout = (workoutData) => request('/workouts', { method: 'POST', body: JSON.stringify(workoutData) });
+export const getWorkouts = (userId) => request(userId ? `/workouts?user_id=${userId}` : '/workouts');
+export const getWorkout = (workoutId) => request(`/workouts/${workoutId}`);
+export const updateWorkout = (workoutId, workoutData) => request(`/workouts/${workoutId}`, { method: 'PATCH', body: JSON.stringify(workoutData) });
+export const deleteWorkout = (workoutId) => request(`/workouts/${workoutId}`, { method: 'DELETE' });
+export const createExercise = (exerciseData) => request('/exercises', { method: 'POST', body: JSON.stringify(exerciseData) });
+export const getExercises = () => request('/exercises');
+export const getExercise = (exerciseId) => request(`/exercises/${exerciseId}`);
+export const updateExercise = (exerciseId, exerciseData) => request(`/exercises/${exerciseId}`, { method: 'PATCH', body: JSON.stringify(exerciseData) });
+export const deleteExercise = (exerciseId) => request(`/exercises/${exerciseId}`, { method: 'DELETE' });
