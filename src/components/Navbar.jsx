@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const authenticatedNavItems = [
@@ -13,12 +13,35 @@ const publicNavItems = [];
 export default function Navbar() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
 
-  const isLoggedIn = false; // Replace this with actual auth logic
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem('authToken');
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+
+    // Listen to storage changes (e.g., login in another tab)
+    window.addEventListener('storage', checkAuth);
+
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+    };
+  }, []);
+
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    navigate('/');
+  }
 
   const navLinkClass = ({ isActive }) =>
     isActive
@@ -30,7 +53,7 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4">
         {/* Logo */}
         <NavLink to="/" className="text-white text-2xl font-bold">
-          FitnessApp
+          FitTrack
         </NavLink>
 
         {/* Desktop Navigation */}
@@ -67,10 +90,7 @@ export default function Navbar() {
             </>
           ) : (
             <button
-              onClick={() => {
-                console.log('Logout logic here');
-                navigate('/');
-              }}
+              onClick={handleLogout}
               className="px-4 py-2 text-white border border-gray-700 rounded hover:bg-gray-700"
             >
               Logout
@@ -144,8 +164,7 @@ export default function Navbar() {
             <button
               className="w-full px-4 py-2 text-white bg-gray-700 rounded"
               onClick={() => {
-                console.log('Logged out');
-                navigate('/');
+                handleLogout();
                 toggleMobileMenu();
               }}
             >
