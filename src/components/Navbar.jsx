@@ -36,9 +36,10 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4">
         <span
           onClick={() => navigate(isLoggedIn ? '/dashboard' : '/')}
-          className="text-white text-2xl font-bold cursor-pointer hover:text-sky-400 transition-colors"
+          className="flex items-center space-x-2 text-white text-2xl font-bold cursor-pointer hover:text-sky-400 transition-colors"
         >
-          FitTrack
+          <img src="/vite.svg" alt="logo" className="w-9 h-9" />
+          <span>FitTrack</span>
         </span>
 
         <div className="hidden lg:flex flex-grow justify-center space-x-6">
