@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../api/api'; // <-- Axios instance
+import api from '../api/api'; 
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -13,21 +13,27 @@ export default function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    try {
-      const res = await api.post('/login',  { username, password });
-      const { access_token } = res.data;
+  try {
+    const res = await api.post('/login', {
+      username: formData.username,
+      password: formData.password
+    });
+    console.log('Login response:', res.data);
+    const { access_token } = res.data;
 
-      login(access_token);
-      navigate('/dashboard');
-    } catch (err) {
-      const message =
-        err.response?.data?.message || 'Login failed. Check credentials.';
-      setError(message);
-    }
-  };
+    login(access_token);
+    navigate('/dashboard');
+  } catch (err) {
+    console.log('Login error', err.response?.data || err.message);
+    const message =
+      err.response?.data?.error || 'Login failed. Check credentials.';
+    setError(message);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
