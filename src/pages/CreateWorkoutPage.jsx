@@ -8,6 +8,7 @@ export default function CreateWorkoutPage() {
   const navigate = useNavigate();
 
   const handleCreateWorkout = async (newWorkout) => {
+    console.log('Submitting workout:', newWorkout);
     try {
       await api.post('/workouts', newWorkout);
       toast.success('Workout created successfully!');
