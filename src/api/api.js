@@ -39,4 +39,5 @@ export const getExercise = (id) => api.get(`/exercises/${id}`);
 export const updateExercise = (id, data) => api.patch(`/exercises/${id}`, data);
 export const deleteExercise = (id) => api.delete(`/exercises/${id}`);
 
+
 export default api;
