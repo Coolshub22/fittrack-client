@@ -4,7 +4,6 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
   const [workoutName, setWorkoutName] = useState('');
   const [date, setDate] = useState('');
   const [notes, setNotes] = useState('');
-
   const [error, setError] = useState('');
 
   const isEditMode = Boolean(initialData && initialData.id);
@@ -19,20 +18,20 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(''); 
+    setError('');
 
     if (!workoutName.trim() || !date) {
       setError('Workout Name and Date are required.');
       return;
     }
-    
-    if (!currentUser || !currentUser.id) {
-        setError('You must be logged in to save a workout.');
-        return;
+
+    if (!currentUser?.id) {
+      setError('You must be logged in to save a workout.');
+      return;
     }
-    
+
     const workoutData = {
-      ...initialData, 
+      ...initialData,
       workout_name: workoutName,
       date,
       notes,
@@ -43,18 +42,19 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-      {/* Error display */}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 max-w-lg mx-auto bg-ui-cards text-text-primary p-8 rounded-xl shadow-md border border-slate-700"
+    >
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+        <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 p-4 rounded-md border-l-4 border-red-500">
           <p className="font-bold">Error</p>
           <p>{error}</p>
         </div>
       )}
 
-      {/* Workout Name Field */}
       <div>
-        <label htmlFor="workoutName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="workoutName" className="block text-sm font-medium mb-1">
           Workout Name
         </label>
         <input
@@ -62,15 +62,14 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
           type="text"
           value={workoutName}
           onChange={(e) => setWorkoutName(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
           placeholder="e.g., Morning Run, Leg Day"
           required
         />
       </div>
 
-      {/* Date Field */}
       <div>
-        <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="date" className="block text-sm font-medium mb-1">
           Date
         </label>
         <input
@@ -78,14 +77,13 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
           required
         />
       </div>
 
-      {/* Notes Field */}
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="notes" className="block text-sm font-medium mb-1">
           Notes (Optional)
         </label>
         <textarea
@@ -93,20 +91,17 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows="4"
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full px-3 py-2 rounded bg-gray-800 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
           placeholder="Any details about your workout, how you felt, etc."
         ></textarea>
       </div>
 
-      {/* Submit Button */}
-      <div>
-        <button 
-          type="submit" 
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-        >
-          {isEditMode ? 'Update Workout' : 'Create Workout'}
-        </button>
-      </div>
+      <button
+        type="submit"
+        className="w-full py-3 bg-accent hover:bg-accent/90 text-white rounded font-semibold shadow transition"
+      >
+        {isEditMode ? 'Update Workout' : 'Create Workout'}
+      </button>
     </form>
   );
-};
+}
