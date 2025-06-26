@@ -6,32 +6,32 @@ const ProgressPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const [progressStats, setProgressStats] = useState({
-    totalWorkouts: 1, // Starts at 1 as requested
-    totalExercises: 0, // Starts at 0, will be dynamically altered
-    caloriesBurned: 340, // Starts at 340 as requested
-    personalBestSquat: '100 kg', // Starts at 100 kg as requested, remains static without further input
-    longestRun: '31.5 km', // Starts at 31.5 km as requested, remains static without further input
-    avgWorkoutDuration: 0, // Starts at 0, will be dynamically altered
-    currentStreak: 1, // Starts at 1 as requested, will be dynamically altered
-    totalDistance: 0, // Starts at 0, will be dynamically altered
-    startingWeight: 80, // kg (Keeping this as is from previous versions)
-    weightHistory: [ // Most recent first
-      { date: '2024-06-25', weight: 78.5 },
-      { date: '2024-06-20', weight: 79.0 },
-      { date: '2024-06-15', weight: 79.5 },
-      { date: '2024-06-10', weight: 80.0 },
+    totalWorkouts: 1,
+    totalExercises: 0,
+    caloriesBurned: 340,
+    personalBestSquat: '100 kg',
+    longestRun: '31.5 km',
+    avgWorkoutDuration: 0,
+    currentStreak: 1,
+    totalDistance: 0,
+    startingWeight: 80,
+    weightHistory: [
+      { date: '2025-06-25', weight: 78.5 },
+      { date: '2025-06-20', weight: 79.0 },
+      { date: '2025-06-15', weight: 79.5 },
+      { date: '2025-06-10', weight: 80.0 },
     ],
   });
 
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
   const [workoutStartTime, setWorkoutStartTime] = useState(null);
-  const [workoutDuration, setWorkoutDuration] = useState(0); // in seconds
+  const [workoutDuration, setWorkoutDuration] = useState(0);
 
   const [newDailyWeight, setNewDailyWeight] = useState('');
   const [recordedWorkoutSessions, setRecordedWorkoutSessions] = useState([
-    { date: '2024-06-24', duration: 65, type: 'Cardio' },
-    { date: '2024-06-23', duration: 45, type: 'Strength' },
-    { date: '2024-06-22', duration: 70, type: 'HIIT' },
+    { date: '2025-06-24', duration: 65, type: 'Cardio' },
+    { date: '2025-06-23', duration: 45, type: 'Strength' },
+    { date: '2025-06-22', duration: 70, type: 'HIIT' },
   ]);
 
   useEffect(() => {
@@ -60,8 +60,8 @@ const ProgressPage = () => {
   const exerciseDistribution = [
     { name: 'Strength Training', value: 45, color: '#00BFFF' },
     { name: 'Cardio', value: 30, color: '#32CD32' },
-    { name: 'Flexibility', value: 15, color: '#FF6B6B' }, // Example color, adjust to palette
-    { name: 'Sports', value: 10, color: '#FFD93D' } // Example color, adjust to palette
+    { name: 'Flexibility', value: 15, color: '#FF6B6B' },
+    { name: 'Sports', value: 10, color: '#FFD93D' }
   ];
 
   const monthlyCalories = [
@@ -73,7 +73,6 @@ const ProgressPage = () => {
     { month: 'Jun', calories: 6200 }
   ];
 
-  // Helper function to format seconds to MM:SS
   const formatTime = (totalSeconds) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -92,22 +91,21 @@ const ProgressPage = () => {
       const newSession = {
         date: new Date().toISOString().split('T')[0],
         duration: durationInMinutes,
-        type: 'General Workout', // Can be expanded later
+        type: 'General Workout',
       };
 
       setRecordedWorkoutSessions((prev) => [newSession, ...prev]);
 
       setProgressStats((prev) => {
         const updatedTotalWorkouts = prev.totalWorkouts + 1;
-        const updatedCaloriesBurned = prev.caloriesBurned + (durationInMinutes * 10); // Example: 10 kcal per minute
-        const updatedTotalExercises = prev.totalExercises + 5; // Example: 5 exercises per workout
+        const updatedCaloriesBurned = prev.caloriesBurned + (durationInMinutes * 10);
+        const updatedTotalExercises = prev.totalExercises + 5;
 
-        // Calculate new average duration: (previous total duration + current duration) / new total workouts
         const previousTotalDurationMinutes = prev.avgWorkoutDuration * (prev.totalWorkouts);
         const newAvgWorkoutDuration = Math.floor((previousTotalDurationMinutes + durationInMinutes) / updatedTotalWorkouts);
 
-        const updatedCurrentStreak = prev.currentStreak + 1; // Simplified: always increments with a workout
-        const updatedTotalDistance = prev.totalDistance + (durationInMinutes / 10); // Example: 1 km per 10 minutes
+        const updatedCurrentStreak = prev.currentStreak + 1;
+        const updatedTotalDistance = prev.totalDistance + (durationInMinutes / 10);
 
         return {
           ...prev,
@@ -132,13 +130,13 @@ const ProgressPage = () => {
       setProgressStats(prevStats => {
         const updatedWeightHistory = [
           { date: today, weight: weight },
-          ...prevStats.weightHistory.filter(entry => entry.date !== today) // Remove old entry if same day
+          ...prevStats.weightHistory.filter(entry => entry.date !== today)
         ];
         return { ...prevStats, weightHistory: updatedWeightHistory };
       });
       setNewDailyWeight('');
     } else {
-      alert('Please enter a valid weight.'); // Using alert for simplicity, consider a custom modal
+      alert('Please enter a valid weight.');
     }
   };
 
@@ -163,7 +161,6 @@ const ProgressPage = () => {
   return (
     <div className="min-h-screen bg-midnight-blue p-6 font-sans">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 mb-8 border border-slate-600">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-5xl font-extrabold text-light-grey tracking-tight">
@@ -172,7 +169,6 @@ const ProgressPage = () => {
             <Trophy className="h-16 w-16 text-deep-sky-blue animate-pulse" />
           </div>
           
-          {/* Tab Navigation */}
           <div className="flex space-x-4 mb-6">
             {['overview', 'charts', 'trends'].map((tab) => (
               <button
@@ -190,7 +186,6 @@ const ProgressPage = () => {
           </div>
         </div>
 
-        {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -252,7 +247,6 @@ const ProgressPage = () => {
               />
             </div>
 
-            {/* Workout Timer */}
             <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
               <h2 className="text-3xl font-bold text-light-grey mb-6 flex items-center">
                 <Clock className="h-8 w-8 text-deep-sky-blue mr-3" />
@@ -291,7 +285,6 @@ const ProgressPage = () => {
               </div>
             </div>
 
-            {/* Daily Weight Tracker */}
             <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
               <h3 className="text-3xl font-bold text-light-grey mb-6 flex items-center">
                 <Weight className="h-8 w-8 text-deep-sky-blue mr-3" />
@@ -347,7 +340,6 @@ const ProgressPage = () => {
               </div>
             </div>
 
-            {/* Recent Workout Sessions */}
             <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
               <h3 className="text-3xl font-bold text-light-grey mb-6 flex items-center">
                 <Activity className="h-8 w-8 text-deep-sky-blue mr-3" />
@@ -374,10 +366,8 @@ const ProgressPage = () => {
           </div>
         )}
 
-        {/* Charts Tab */}
         {activeTab === 'charts' && (
           <div className="space-y-8">
-            {/* Weekly Progress Line Chart */}
             <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
               <h2 className="text-3xl font-bold text-light-grey mb-6 flex items-center">
                 <TrendingUp className="h-8 w-8 text-deep-sky-blue mr-3" />
@@ -410,7 +400,6 @@ const ProgressPage = () => {
               </div>
             </div>
 
-            {/* Exercise Distribution Pie Chart */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
                 <h2 className="text-2xl font-bold text-light-grey mb-6">Exercise Distribution</h2>
@@ -442,7 +431,6 @@ const ProgressPage = () => {
                 </div>
               </div>
 
-              {/* Monthly Calories Bar Chart */}
               <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
                 <h2 className="text-2xl font-bold text-light-grey mb-6">Monthly Calories Burned</h2>
                 <div className="h-64">
@@ -468,7 +456,6 @@ const ProgressPage = () => {
           </div>
         )}
 
-        {/* Trends Tab */}
         {activeTab === 'trends' && (
           <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
             <h2 className="text-3xl font-bold text-light-grey mb-6">Workout Duration Trends</h2>
@@ -499,7 +486,6 @@ const ProgressPage = () => {
           </div>
         )}
 
-        {/* Footer Motto */}
         <div className="text-center mt-12 p-6 bg-slate-grey rounded-xl border border-slate-600">
           <p className="text-stone-grey text-lg italic">
             "Every workout brings you closer to your goals. Keep pushing! 💪"
