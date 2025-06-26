@@ -34,9 +34,13 @@ export default function Navbar() {
   return (
     <header className="w-full bg-gray-900 border-b border-gray-800 py-4 shadow">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4">
-        <NavLink to="/" className="text-white text-2xl font-bold">
-          FitTrack
-        </NavLink>
+        <span
+          onClick={() => navigate(isLoggedIn ? '/dashboard' : '/')}
+          className="flex items-center space-x-2 text-white text-2xl font-bold cursor-pointer hover:text-sky-400 transition-colors"
+        >
+          <img src="/vite.svg" alt="logo" className="w-9 h-9" />
+          <span>FitTrack</span>
+        </span>
 
         <div className="hidden lg:flex flex-grow justify-center space-x-6">
           {publicNavItems.map((item, i) => (
