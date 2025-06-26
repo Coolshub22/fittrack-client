@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { PlusCircle, FileText, Trash2, Edit, ChevronDown, Clock, Dumbbell as DumbbellIcon, Calendar, Plus } from 'lucide-react';
-import * as api from '../api/api';
+import {
+  PlusCircle, FileText, Trash2, Edit, ChevronDown,
+  Clock, Dumbbell as DumbbellIcon, Calendar, Plus
+} from 'lucide-react';
+import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,25 +27,27 @@ function ExerciseList({ workoutId }) {
     fetchExercises();
   }, [workoutId]);
 
-  if (isLoading) return <div className="text-center p-4 text-gray-500">Loading exercises...</div>;
+  if (isLoading) return <div className="text-center p-4 text-text-secondary">Loading exercises...</div>;
   if (error) return <div className="text-center p-4 text-red-500">{error}</div>;
-  if (exercises.length === 0) return <div className="text-center p-4 text-gray-500">No exercises found for this workout.</div>;
+  if (exercises.length === 0) return <div className="text-center p-4 text-text-secondary">No exercises found for this workout.</div>;
 
   return (
-    <div className="space-y-3 p-4">
+    <div className="space-y-3 p-4 bg-ui-cards">
       {exercises.map(ex => (
-        <div key={ex.id} className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
-          <h5 className="font-semibold text-gray-800 dark:text-white">{ex.name}</h5>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600 dark:text-gray-300 mt-1">
-            <span className="capitalize bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-0.5 rounded-full">{ex.type}</span>
+        <div key={ex.id} className="bg-ui-cards border border-slate-700 p-4 rounded-xl shadow-sm">
+          <h5 className="text-lg font-semibold text-text-primary mb-2">{ex.name}</h5>
+          <div className="flex flex-wrap items-center gap-3 text-text-secondary text-base">
+            <span className="capitalize bg-indigo-200 dark:bg-indigo-800 text-indigo-900 dark:text-indigo-200 px-2 py-0.5 rounded-full text-sm">
+              {ex.type}
+            </span>
             {ex.type === 'strength' ? (
               <>
-                <span><DumbbellIcon size={14} className="inline mr-1" />{ex.weight || 0} kg</span>
+                <span className="flex items-center"><DumbbellIcon className="w-4 h-4 mr-1" />{ex.weight || 0} kg</span>
                 <span>Sets: {ex.sets || 0}</span>
                 <span>Reps: {ex.reps || 0}</span>
               </>
             ) : (
-              <span><Clock size={14} className="inline mr-1" />{ex.duration || 0} mins</span>
+              <span className="flex items-center"><Clock className="w-4 h-4 mr-1" />{ex.duration || 0} mins</span>
             )}
           </div>
         </div>
@@ -113,10 +118,10 @@ export default function WorkoutsPage() {
     );
   }, [workouts, searchTerm]);
 
-  if (loading) return <p className="text-center text-lg mt-8">Loading your workouts...</p>;
+  if (loading) return <p className="text-center text-lg text-text-secondary mt-8">Loading your workouts...</p>;
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
+    <div className="w-full max-w-4xl mx-auto px-4 py-10">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-extrabold text-text-primary">Your Workouts</h1>
         <button
@@ -130,30 +135,30 @@ export default function WorkoutsPage() {
       {error && <p className="text-center text-red-500 bg-red-100 p-3 rounded-md">{error}</p>}
 
       {filteredWorkouts.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredWorkouts.map(workout => {
             const isExpanded = expandedWorkoutId === workout.id;
             return (
-              <div key={workout.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300">
-                <div 
+              <div key={workout.id} className="bg-ui-cards border border-slate-700 rounded-2xl shadow-md transition-all duration-300">
+                <div
                   className="p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   onClick={() => handleToggleExpand(workout.id)}
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{workout.workout_name}</h3>
-                      <div className="flex items-center text-gray-600 dark:text-gray-400 mb-4">
+                      <h3 className="text-xl font-semibold text-text-primary mb-2">{workout.workout_name}</h3>
+                      <div className="flex items-center text-text-secondary text-sm mb-3">
                         <Calendar className="h-4 w-4 mr-2" />
                         <span>{new Date(workout.date).toLocaleDateString()}</span>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <button onClick={(e) => handleEditWorkout(e, workout.id)} className="p-1 text-blue-500 hover:text-blue-700"><Edit size={18}/></button>
-                      <button onClick={(e) => handleDeleteWorkout(e, workout.id)} className="p-1 text-red-500 hover:text-red-700"><Trash2 size={18}/></button>
+                      <button onClick={(e) => handleEditWorkout(e, workout.id)} className="p-1 text-blue-500 hover:text-blue-700"><Edit size={18} /></button>
+                      <button onClick={(e) => handleDeleteWorkout(e, workout.id)} className="p-1 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
                       <ChevronDown className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                     </div>
                   </div>
-                  <p className="text-gray-700 dark:text-gray-300 line-clamp-2">
+                  <p className="text-text-secondary mt-2">
                     <FileText className="inline h-4 w-4 mr-1" />
                     {workout.notes || "No notes for this workout."}
                   </p>
@@ -168,8 +173,8 @@ export default function WorkoutsPage() {
           })}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h3 className="text-xl font-medium text-gray-800 dark:text-gray-200">
+        <div className="text-center py-16 bg-ui-cards border border-slate-700 rounded-xl shadow-md">
+          <h3 className="text-xl font-medium text-text-primary">
             {searchTerm ? 'No workouts match your search.' : 'You haven\'t logged any workouts yet.'}
           </h3>
         </div>
