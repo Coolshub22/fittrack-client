@@ -83,7 +83,7 @@ const DashboardPage = () => {
               Welcome back, {user.username}!
             </h1>
             <p className="text-text-secondary">
-              Let’s crush your next workout. 💪
+              Let's crush your next workout. 💪
             </p>
           </div>
         </div>
