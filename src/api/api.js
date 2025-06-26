@@ -1,38 +1,42 @@
 // src/api/api.js
-const API_BASE_URL = 'http://localhost:9000';
+import axios from 'axios';
 
-const request = async (endpoint, options = {}) => {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const headers = {
+// ✅ Create an Axios instance
+const api = axios.create({
+  baseURL: 'http://localhost:5000', // 🔁 Change this to match your actual backend port
+  headers: {
     'Content-Type': 'application/json',
-    ...options.headers,
-  };
+  },
+});
 
-  try {
-    const response = await fetch(url, { ...options, headers });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: `HTTP error! Status: ${response.status}` }));
-      throw new Error(errorData.error);
-    }
-    return response.json();
-  } catch (error) {
-    console.error(`API request failed for endpoint ${endpoint}:`, error);
-    throw error;
+// ✅ Optional: Automatically add token to requests (if using auth)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('access_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
 
-export const createUser = (userData) => request('/users', { method: 'POST', body: JSON.stringify(userData) });
-export const getUsers = () => request('/users');
-export const getUser = (userId) => request(`/users/${userId}`);
-export const updateUser = (userId, userData) => request(`/users/${userId}`, { method: 'PATCH', body: JSON.stringify(userData) });
-export const deleteUser = (userId) => request(`/users/${userId}`, { method: 'DELETE' });
-export const createWorkout = (workoutData) => request('/workouts', { method: 'POST', body: JSON.stringify(workoutData) });
-export const getWorkouts = (userId) => request(userId ? `/workouts?user_id=${userId}` : '/workouts');
-export const getWorkout = (workoutId) => request(`/workouts/${workoutId}`);
-export const updateWorkout = (workoutId, workoutData) => request(`/workouts/${workoutId}`, { method: 'PATCH', body: JSON.stringify(workoutData) });
-export const deleteWorkout = (workoutId) => request(`/workouts/${workoutId}`, { method: 'DELETE' });
-export const createExercise = (exerciseData) => request('/exercises', { method: 'POST', body: JSON.stringify(exerciseData) });
-export const getExercises = () => request('/exercises');
-export const getExercise = (exerciseId) => request(`/exercises/${exerciseId}`);
-export const updateExercise = (exerciseId, exerciseData) => request(`/exercises/${exerciseId}`, { method: 'PATCH', body: JSON.stringify(exerciseData) });
-export const deleteExercise = (exerciseId) => request(`/exercises/${exerciseId}`, { method: 'DELETE' });
+// ✅ Export API instance as default
+// Example CRUD helpers
+
+export const createUser = (userData) => api.post('/users', userData);
+export const getUsers = () => api.get('/users');
+export const getUser = (id) => api.get(`/users/${id}`);
+export const updateUser = (id, userData) => api.patch(`/users/${id}`, userData);
+export const deleteUser = (id) => api.delete(`/users/${id}`);
+
+export const createWorkout = (data) => api.post('/workouts', data);
+export const getWorkouts = (userId) => api.get(userId ? `/workouts?user_id=${userId}` : '/workouts');
+export const getWorkout = (id) => api.get(`/workouts/${id}`);
+export const updateWorkout = (id, data) => api.patch(`/workouts/${id}`, data);
+export const deleteWorkout = (id) => api.delete(`/workouts/${id}`);
+
+export const createExercise = (data) => api.post('/exercises', data);
+export const getExercises = () => api.get('/exercises');
+export const getExercise = (id) => api.get(`/exercises/${id}`);
+export const updateExercise = (id, data) => api.patch(`/exercises/${id}`, data);
+export const deleteExercise = (id) => api.delete(`/exercises/${id}`);
+
+export default api;
