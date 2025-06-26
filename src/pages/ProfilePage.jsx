@@ -283,7 +283,7 @@ const ProfilePage = () => {
             </div>
 
             <h2 className="text-2xl font-bold text-gray-200 mb-2">
-              {user.name || "User Profile"}
+              {user.name || "Complete Your Profile"}
             </h2>
             <div className="inline-flex items-center px-3 py-1 bg-gray-900 rounded-full border border-gray-700">
               <span className="text-gray-400 text-sm mr-2">Fitness Level:</span>
@@ -308,7 +308,7 @@ const ProfilePage = () => {
             <InfoCard icon={Phone} label="Phone" value={user.phone} hint="e.g., +254 7XX XXX XXX" />
             <InfoCard icon={Calendar} label="Age" value={user.age > 0 ? `${user.age} years` : ''} hint="e.g., 30 years" />
             <InfoCard icon={MapPin} label="Location" value={user.location} hint="e.g., Nairobi, Kenya" />
-            <InfoCard icon={Calendar} label="Member Since" value={user.joinDate} />
+            <InfoCard icon={Calendar} label="Member Since" value="" hint="e.g., June 26, 2025" />
             <InfoCard
               icon={Scale}
               label="Starting Weight"
@@ -333,11 +333,11 @@ const ProfilePage = () => {
               <p className="text-gray-400 text-sm">Favorite Workout</p>
             </div>
             <div className="bg-gray-900 p-4 rounded-lg text-center border border-gray-700 hover:border-blue-400 transition-all duration-300">
-              <User className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <Scale className="h-8 w-8 text-purple-400 mx-auto mb-2" />
               <h4 className="text-base font-bold text-gray-200">
-                {user.fitnessLevel || "Not Set"}
+                {user.startingWeight > 0 ? `${user.startingWeight} kg` : "Not Set"}
               </h4>
-              <p className="text-gray-400 text-sm">Fitness Level</p>
+              <p className="text-gray-400 text-sm">Starting Weight</p>
             </div>
           </div>
 
