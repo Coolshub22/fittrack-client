@@ -1,111 +1,95 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createWorkout } from '../api/api';
+import api from '../api/api';
 
 export default function CreateWorkoutPage() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     workout_name: '',
-    date: '',
-    intensity: '',
     notes: '',
+    intensity: '',
+    duration: '',
   });
-
   const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSubmitting(true);
-
-    if (!formData.workout_name || !formData.date) {
-      setError('Please fill out workout name and date.');
-      setSubmitting(false);
-      return;
-    }
 
     try {
-      await createWorkout(formData);
-      navigate('/workouts');
+      const res = await api.post('/workouts', {
+        ...formData,
+        intensity: parseFloat(formData.intensity),
+        duration: parseInt(formData.duration),
+      });
+
+      navigate(`/workouts/${res.data.id}`);
     } catch (err) {
-      console.error(err);
-      setError('Failed to create workout. Please try again.');
-    } finally {
-      setSubmitting(false);
+      setError('Failed to create workout. Please check your input.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#111827] text-[#E5E7EB] p-6">
-      <div className="max-w-xl mx-auto bg-[#1F2937] p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-6">Create New Workout</h1>
+    <div className="min-h-screen bg-background text-text-primary flex items-center justify-center px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-lg bg-ui-cards p-8 rounded-xl shadow-md border border-slate-700"
+      >
+        <h2 className="text-3xl font-bold mb-6">Create New Workout</h2>
 
-        {error && <div className="text-red-400 mb-4">{error}</div>}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 text-[#9CA3AF]">Workout Name</label>
-            <input
-              type="text"
-              name="workout_name"
-              className="w-full p-2 rounded bg-[#111827] text-[#E5E7EB] border border-[#374151]"
-              value={formData.workout_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <label className="block mb-2 font-medium">Workout Name</label>
+        <input
+          type="text"
+          name="workout_name"
+          value={formData.workout_name}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 bg-gray-800 text-white rounded border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+          required
+        />
 
-          <div>
-            <label className="block mb-1 text-[#9CA3AF]">Date</label>
-            <input
-              type="date"
-              name="date"
-              className="w-full p-2 rounded bg-[#111827] text-[#E5E7EB] border border-[#374151]"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <label className="block mb-2 font-medium">Notes</label>
+        <textarea
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 bg-gray-800 text-white rounded border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
 
-          <div>
-            <label className="block mb-1 text-[#9CA3AF]">Intensity (1 - 10)</label>
-            <input
-              type="number"
-              name="intensity"
-              min="1"
-              max="10"
-              className="w-full p-2 rounded bg-[#111827] text-[#E5E7EB] border border-[#374151]"
-              value={formData.intensity}
-              onChange={handleChange}
-            />
-          </div>
+        <label className="block mb-2 font-medium">Intensity (0-10)</label>
+        <input
+          type="number"
+          name="intensity"
+          value={formData.intensity}
+          onChange={handleChange}
+          min="0"
+          max="10"
+          step="0.1"
+          className="w-full mb-4 p-2 bg-gray-800 text-white rounded border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
 
-          <div>
-            <label className="block mb-1 text-[#9CA3AF]">Notes</label>
-            <textarea
-              name="notes"
-              className="w-full p-2 rounded bg-[#111827] text-[#E5E7EB] border border-[#374151]"
-              value={formData.notes}
-              onChange={handleChange}
-              rows={4}
-            />
-          </div>
+        <label className="block mb-2 font-medium">Duration (minutes)</label>
+        <input
+          type="number"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+          min="1"
+          className="w-full mb-6 p-2 bg-gray-800 text-white rounded border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-[#00BFFF] text-[#111827] font-bold py-2 rounded hover:opacity-90 transition-opacity"
-          >
-            {submitting ? 'Saving...' : 'Create Workout'}
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          className="w-full bg-accent text-white py-2 rounded hover:bg-accent/90 transition"
+        >
+          Save Workout
+        </button>
+      </form>
     </div>
   );
 }
