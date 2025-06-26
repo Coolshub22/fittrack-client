@@ -22,7 +22,7 @@ export default function WorkoutForm({ initialData = {}, onSubmit }) {
       ...formData,
       intensity: parseFloat(formData.intensity),
       duration: parseInt(formData.duration),
-      date: new Date(formData.date).toISOString(),
+      date: new Date(formData.date).toISOString().replace('Z', ''),
     });
   };
 
