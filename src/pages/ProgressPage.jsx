@@ -15,7 +15,7 @@ const ProgressPage = () => {
     currentStreak: 12,
     totalDistance: '245 km'
   };
-
+  
   const weeklyProgress = [
     { week: 'Week 1', workouts: 4, calories: 1200, duration: 180 },
     { week: 'Week 2', workouts: 5, calories: 1450, duration: 220 },
@@ -241,7 +241,7 @@ const ProgressPage = () => {
           </div>
         )}
 
-        {/* Trends Tab */}
+        { }
         {activeTab === 'trends' && (
           <div className="bg-slate-grey rounded-2xl shadow-2xl p-8 border border-slate-600">
             <h2 className="text-3xl font-bold text-light-grey mb-6">Workout Duration Trends</h2>
@@ -272,7 +272,7 @@ const ProgressPage = () => {
           </div>
         )}
 
-        {/* Motivational Footer */}
+        {  }
         <div className="text-center mt-12 p-6 bg-slate-grey rounded-xl border border-slate-600">
           <p className="text-stone-grey text-lg italic">
             "Every workout brings you closer to your goals. Keep pushing, Mwirigi! 💪"
