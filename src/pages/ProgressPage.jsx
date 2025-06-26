@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Dumbbell, Flame, Timer, BarChart3, MapPin, Loader, Trophy } from 'lucide-react';
 import api from '../api/api';
@@ -34,6 +35,7 @@ const ProgressPage = () => {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader className="animate-spin w-12 h-12 text-accent" />
+
       </div>
     );
   }
@@ -73,6 +75,7 @@ const ProgressPage = () => {
           <div>
             <p className="text-text-secondary text-lg">Total Exercises</p>
             <p className="text-2xl font-bold text-text-primary">{summary?.totalExercises ?? 0}</p>
+
           </div>
         </div>
 
@@ -81,6 +84,7 @@ const ProgressPage = () => {
           <div>
             <p className="text-text-secondary text-lg">Current Streak</p>
             <p className="text-2xl font-bold text-text-primary">{summary?.currentStreak ?? 0} days</p>
+
           </div>
         </div>
 
@@ -112,6 +116,7 @@ const ProgressPage = () => {
           <p className="text-lg text-text-secondary">No personal bests recorded yet.</p>
         )}
       </div>
+
     </div>
   );
 };
