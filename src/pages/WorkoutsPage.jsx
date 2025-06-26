@@ -1,10 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PlusCircle, Calendar, FileText, Trash2, Edit, ChevronDown, Clock, Dumbbell as DumbbellIcon } from 'lucide-react';
 // Using the api.js file you provided earlier.
-import * as api from './api';
+import * as api from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
+function ExerciseList({ workoutId }) {
+  const [exercises, setExercises] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const data = await api.getExercises();
+        const filtered = data.filter(ex => ex.workout_id === workoutId);
+        setExercises(filtered);
+      } catch (err) {
+        setError("Failed to fetch exercises.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchExercises();
   }, [workoutId]);
 
@@ -44,7 +60,8 @@ import * as api from './api';
 }
 
 
-export default function WorkoutsPage({ navigate, currentUser }) {
+export default function WorkoutsPage({ currentUser }) {
+  const navigate = useNavigate();
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
