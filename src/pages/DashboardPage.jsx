@@ -1,9 +1,15 @@
-// src/pages/DashboardPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Loader, Dumbbell, BarChart3, PlusCircle } from 'lucide-react';
-import api from '../api/api'; 
+import {
+  Loader,
+  Dumbbell,
+  BarChart3,
+  PlusCircle,
+  UserPlus,
+  UserCircle,
+} from 'lucide-react';
+import api from '../api/api';
 
 const DashboardPage = () => {
   const { token } = useAuth();
@@ -33,18 +39,27 @@ const DashboardPage = () => {
   const shortcuts = [
     {
       title: 'My Workouts',
-      icon: <Dumbbell className="text-accent w-6 h-6" />,
+      icon: <Dumbbell className="text-purple-400 w-6 h-6" />,
       onClick: () => navigate('/workouts'),
     },
     {
       title: 'Progress Dashboard',
-      icon: <BarChart3 className="text-accent w-6 h-6" />,
+      icon: <BarChart3 className="text-green-400 w-6 h-6" />,
       onClick: () => navigate('/progress'),
     },
     {
       title: 'New Workout',
-      icon: <PlusCircle className="text-accent w-6 h-6" />,
+      icon: <PlusCircle className="text-orange-400 w-6 h-6" />,
       onClick: () => navigate('/workouts/new'),
+    },
+    {
+      title: user ? 'View Profile' : 'Create Profile',
+      icon: user ? (
+        <UserCircle className="text-blue-400 w-6 h-6" />
+      ) : (
+        <UserPlus className="text-blue-400 w-6 h-6" />
+      ),
+      onClick: () => navigate(user ? '/profile' : '/profile/edit'),
     },
   ];
 
@@ -58,9 +73,21 @@ const DashboardPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-4xl font-extrabold text-text-primary mb-6">
-        {user ? `Welcome, ${user.username}!` : 'Welcome to FitTrack'}
-      </h1>
+      {user && (
+        <div className="flex items-center mb-8 space-x-4">
+          <div className="w-16 h-16 bg-gray-900 rounded-full border-2 border-blue-400 flex items-center justify-center text-3xl shadow-xl">
+            {user.avatar || '🏋️‍♂️'}
+          </div>
+          <div>
+            <h1 className="text-3xl font-extrabold text-text-primary">
+              Welcome back, {user.username}!
+            </h1>
+            <p className="text-text-secondary">
+              Let’s crush your next workout. 💪
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         {shortcuts.map((shortcut, index) => (
@@ -71,7 +98,9 @@ const DashboardPage = () => {
           >
             <div className="flex items-center space-x-4">
               {shortcut.icon}
-              <span className="text-xl font-semibold text-text-primary">{shortcut.title}</span>
+              <span className="text-xl font-semibold text-text-primary">
+                {shortcut.title}
+              </span>
             </div>
           </div>
         ))}
@@ -80,16 +109,22 @@ const DashboardPage = () => {
       {/* Stats Section */}
       {user && (
         <div className="bg-ui-cards p-6 rounded-2xl border border-slate-700 shadow-md">
-          <h2 className="text-2xl font-bold mb-4 text-text-primary">Your Stats</h2>
+          <h2 className="text-2xl font-bold mb-4 text-text-primary">
+            Your Stats
+          </h2>
 
           <div className="space-y-4">
             <p className="text-lg text-text-secondary">
-              <span className="font-semibold text-text-primary">Current Streak:</span>{' '}
+              <span className="font-semibold text-text-primary">
+                Current Streak:
+              </span>{' '}
               {user.current_streak ?? 'N/A'} days
             </p>
 
             <div className="text-lg text-text-secondary">
-              <span className="font-semibold text-text-primary">Personal Bests:</span>
+              <span className="font-semibold text-text-primary">
+                Personal Bests:
+              </span>
               {user.personal_bests && user.personal_bests.length > 0 ? (
                 <ul className="list-disc list-inside mt-2">
                   {user.personal_bests.map((pb, idx) => (
