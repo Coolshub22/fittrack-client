@@ -98,10 +98,11 @@ export default function WorkoutForm({ onSubmit, initialData = {}, currentUser })
 
       <button
         type="submit"
-        className="w-full py-3 bg-accent hover:bg-accent/90 text-white rounded font-semibold shadow transition"
+        className="w-full py-3 bg-accent text-white font-semibold rounded shadow transition transform hover:scale-105 hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent"
       >
         {isEditMode ? 'Update Workout' : 'Create Workout'}
       </button>
+
     </form>
   );
 }
