@@ -33,7 +33,7 @@ function LandingPage() {
       {/* Features Section */}
       <section className="w-full max-w-6xl mt-16 p-8 bg-gray-800 rounded-xl shadow-2xl">
         <h2 className="text-3xl sm:text-4xl font-bold text-sky-400 text-center mb-10">
-          Why Choose FitnessApp?
+          Why Choose FitTrack?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center bg-gray-900 p-6 rounded-lg shadow-md">
