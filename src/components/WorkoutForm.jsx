@@ -1,112 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-export default function WorkoutForm({ onSubmit, initialData = {}, currentUser }) {
-  const [workoutName, setWorkoutName] = useState('');
-  const [date, setDate] = useState('');
-  const [notes, setNotes] = useState('');
+export default function WorkoutForm({ initialData = {}, onSubmit }) {
+  const [formData, setFormData] = useState({
+    workout_name: initialData.workout_name || '',
+    notes: initialData.notes || '',
+    intensity: initialData.intensity || '',
+    duration: initialData.duration || '',
+    date: initialData.date
+      ? new Date(initialData.date).toISOString().slice(0, 16)
+      : new Date().toISOString().slice(0, 16),
+  });
 
-  const [error, setError] = useState('');
-
-  const isEditMode = Boolean(initialData && initialData.id);
-
-  useEffect(() => {
-    if (isEditMode) {
-      setWorkoutName(initialData.workout_name || '');
-      setDate(initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : '');
-      setNotes(initialData.notes || '');
-    }
-  }, [initialData, isEditMode]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((f) => ({ ...f, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(''); 
-
-    if (!workoutName.trim() || !date) {
-      setError('Workout Name and Date are required.');
-      return;
-    }
-    
-    if (!currentUser || !currentUser.id) {
-        setError('You must be logged in to save a workout.');
-        return;
-    }
-    
-    const workoutData = {
-      ...initialData, 
-      workout_name: workoutName,
-      date,
-      notes,
-      user_id: currentUser.id,
-    };
-
-    onSubmit(workoutData);
+    onSubmit({
+      ...formData,
+      intensity: parseFloat(formData.intensity),
+      duration: parseInt(formData.duration),
+      date: new Date(formData.date).toISOString().replace('Z', ''),
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-      {/* Error display */}
-      {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-          <p className="font-bold">Error</p>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {/* Workout Name Field */}
+    <form
+      onSubmit={handleSubmit}
+      className="bg-ui-cards p-6 rounded-2xl border border-slate-700 shadow-md space-y-5"
+    >
       <div>
-        <label htmlFor="workoutName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Workout Name
-        </label>
+        <label className="block mb-1 text-text-primary font-semibold">Workout Name</label>
         <input
-          id="workoutName"
           type="text"
-          value={workoutName}
-          onChange={(e) => setWorkoutName(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="e.g., Morning Run, Leg Day"
+          name="workout_name"
+          value={formData.workout_name}
+          onChange={handleChange}
           required
+          className="w-full px-4 py-2 rounded-xl bg-ui-input text-text-primary border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
         />
       </div>
 
-      {/* Date Field */}
       <div>
-        <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Date
-        </label>
-        <input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          required
-        />
-      </div>
-
-      {/* Notes Field */}
-      <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Notes (Optional)
-        </label>
+        <label className="block mb-1 text-text-primary font-semibold">Notes</label>
         <textarea
-          id="notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows="4"
-          className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="Any details about your workout, how you felt, etc."
-        ></textarea>
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+          className="w-full px-4 py-2 rounded-xl bg-ui-input text-text-primary border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
       </div>
 
-      {/* Submit Button */}
       <div>
-        <button 
-          type="submit" 
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-        >
-          {isEditMode ? 'Update Workout' : 'Create Workout'}
-        </button>
+        <label className="block mb-1 text-text-primary font-semibold">Intensity (0–10)</label>
+        <input
+          type="number"
+          name="intensity"
+          value={formData.intensity}
+          onChange={handleChange}
+          min="0"
+          max="10"
+          step="0.1"
+          className="w-full px-4 py-2 rounded-xl bg-ui-input text-text-primary border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
       </div>
+
+      <div>
+        <label className="block mb-1 text-text-primary font-semibold">Duration (minutes)</label>
+        <input
+          type="number"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+          min="0"
+          className="w-full px-4 py-2 rounded-xl bg-ui-input text-text-primary border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1 text-text-primary font-semibold">Date</label>
+        <input
+          type="datetime-local"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          className="w-full px-4 py-2 rounded-xl bg-ui-input text-text-primary border border-slate-600 focus:outline-none focus:ring-2 focus:ring-accent"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full bg-accent text-white px-6 py-3 rounded-xl font-semibold bg-sky-700 hover:bg-sky-600 transition-all duration-200"
+      >
+        {initialData?.id ? 'Edit Workout' : 'New Workout'}
+      </button>
     </form>
   );
-};
+}
