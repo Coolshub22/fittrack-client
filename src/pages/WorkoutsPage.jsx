@@ -123,12 +123,13 @@ export default function WorkoutsPage() {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold text-text-primary">Your Workouts</h1>
+        <h1 className="text-4xl font-extrabold text-text-primary">My Workouts</h1>
         <button
+        title='Create New Workout...'
           onClick={() => navigate('/workouts/new')}
-          className="flex items-center gap-2 bg-accent hover:opacity-90 text-background font-bold py-2 px-4 rounded-lg transition-opacity duration-200"
+          className=" flex items-center gap-1 bg-accent hover:opacity-90 text-background font-bold py-1 px-2 rounded-lg transition-opacity duration-200 border-1"
         >
-          <Plus size={20} /> New Workout
+          <Plus size={20} />
         </button>
       </div>
 
@@ -153,8 +154,8 @@ export default function WorkoutsPage() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <button onClick={(e) => handleEditWorkout(e, workout.id)} className="p-1 text-blue-500 hover:text-blue-700"><Edit size={18} /></button>
-                      <button onClick={(e) => handleDeleteWorkout(e, workout.id)} className="p-1 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+                      <button title='Edit Workout...' onClick={(e) => handleEditWorkout(e, workout.id)} className="p-1 text-blue-500 hover:text-blue-700"><Edit size={18} /></button>
+                      <button title='Delete Workout...' onClick={(e) => handleDeleteWorkout(e, workout.id)} className="p-1 text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
                       <ChevronDown className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                     </div>
                   </div>

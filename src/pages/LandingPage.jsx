@@ -53,7 +53,7 @@ function LandingPage() {
 
       {/* Footer */}
       <footer className="mt-20 text-center text-gray-400 text-sm">
-        <p>&copy; {new Date().getFullYear()} FitnessApp. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} FitTrack. All rights reserved.</p>
       </footer>
     </div>
   );
