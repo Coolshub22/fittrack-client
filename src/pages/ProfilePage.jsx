@@ -31,7 +31,6 @@ const ProfilePage = () => {
     };
   });
 
-  // Save to localStorage whenever user data changes
   useEffect(() => {
     localStorage.setItem('userProfile', JSON.stringify(user));
   }, [user]);
