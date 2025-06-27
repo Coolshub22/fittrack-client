@@ -43,9 +43,10 @@ export default function EditWorkoutPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-4xl font-bold text-center text-text-primary mb-8">
+      {/* <h2 className="text-4xl font-bold text-center text-text-primary mb-8">
         Edit Workout
-      </h2>
+      </h2> */}
+      <p className='mb-2 font-semibold'>Edit your Workout & Exercise Info:</p>
       {workout && (
         <WorkoutForm
           initialData={workout}
