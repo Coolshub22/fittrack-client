@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { LogOut } from 'lucide-react';
+
+
 
 const authenticatedNavItems = [
   { path: '/dashboard', name: 'Dashboard' },
@@ -73,12 +76,10 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-white border border-gray-700 rounded hover:bg-gray-700"
-            >
-              Logout
-            </button>
+            <button onClick={handleLogout} className="flex items-center p-3  gap-2 text-white-rounded hover:bg-gray-700 border-gray-700 rounded">
+             <LogOut size={18} />
+             Logout
+           </button>
           )}
         </div>
 

@@ -92,9 +92,9 @@ export default function WorkoutForm({ initialData = {}, onSubmit }) {
 
       <button
         type="submit"
-        className="w-full bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-dark transition-all duration-200"
+        className="w-full bg-accent text-white px-6 py-3 rounded-xl font-semibold bg-sky-700 hover:bg-sky-600 transition-all duration-200"
       >
-        {initialData?.id ? 'Update Workout' : 'Create Workout'}
+        {initialData?.id ? 'Edit Workout' : 'New Workout'}
       </button>
     </form>
   );
