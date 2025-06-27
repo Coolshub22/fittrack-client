@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Save, X } from 'lucide-react';
+import { Save, X, Camera } from 'lucide-react';
 
 const ProfileForm = ({ user, onSave, onCancel }) => {
   const [formData, setFormData] = useState(user);
@@ -18,6 +18,15 @@ const ProfileForm = ({ user, onSave, onCancel }) => {
       achievements: parseInt(formData.achievements) || 0,
       startingWeight: parseFloat(formData.startingWeight) || 0
     });
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => setFormData({ ...formData, avatar: event.target.result });
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -90,7 +99,13 @@ const ProfileForm = ({ user, onSave, onCancel }) => {
       </div>
 
       <div className="mb-6">
-        <p className="text-sm text-gray-400 mb-2">Choose Avatar:</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm text-gray-400">Choose Avatar / Upload Profile Picture:</p>
+          <label className="bg-blue-400 hover:bg-blue-600 text-white p-2 rounded-lg cursor-pointer transition">
+            <Camera className="w-4 h-4" />
+            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+          </label>
+        </div>
         <div className="flex gap-2 flex-wrap">
           {avatarOptions.map(avatar => (
             <button
