@@ -21,10 +21,10 @@ export default function CreateWorkoutPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold text-center text-text-primary mb-8">
+      {/* <h2 className="text-3xl font-bold text-center text-text-primary mb-8">
         New Workout
-      </h2>
-      <p className='mb-2'>Fill in your workout details:</p>
+      </h2> */}
+      <p className='mb-2 font-semibold'>Fill in your Workout & Exercise Info:</p>
       <WorkoutForm onSubmit={handleCreateWorkout} />
     </div>
   );
