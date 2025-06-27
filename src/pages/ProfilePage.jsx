@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Heart, Trophy, Scale, Edit3 } from 'lucide-react';
 import ProfileForm from '../components/ProfileForm';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
-    id: 1,
-    name: '',
-    email: '',
-    phone: '',
-    age: 0,
-    location: '',
-    bio: '',
-    joinDate: new Date().toLocaleDateString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric'
-    }),
-    fitnessLevel: '',
-    achievements: 0,
-    favoriteWorkout: '',
-    startingWeight: 0,
-    avatar: '🏋️‍♂️'
+  
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('userProfile');
+    if (savedUser) {
+      return JSON.parse(savedUser);
+    }
+    return {
+      id: 1,
+      name: '',
+      email: '',
+      phone: '',
+      age: 0,
+      location: '',
+      bio: '',
+      joinDate: new Date().toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      }),
+      fitnessLevel: '',
+      achievements: 0,
+      favoriteWorkout: '',
+      startingWeight: 0,
+      avatar: '🏋️‍♂️'
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(user));
+  }, [user]);
 
   const handleEditUser = (updatedUser) => {
     setUser(updatedUser);
@@ -44,7 +57,7 @@ const ProfilePage = () => {
   const InfoCard = ({ icon: Icon, label, value }) => (
     <div className="bg-ui-cards p-4 rounded-2xl border border-slate-700 hover:border-blue-400 transition duration-300">
       <div className="flex items-center space-x-3">
-        <Icon  className="w-5 h-5 text-blue-400" />
+        <Icon className="w-5 h-5 text-blue-400" />
         <div>
           <p className="text-sm text-text-secondary">{label}</p>
           <p className="text-lg font-semibold text-text-primary">{value || 'Not Set'}</p>
