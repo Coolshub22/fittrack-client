@@ -4,7 +4,6 @@ import {
   Flame,
   Timer,
   BarChart3,
-  MapPin,
   Loader,
   Trophy,
 } from 'lucide-react';
@@ -50,7 +49,6 @@ const ProgressPage = () => {
     <div className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="text-4xl font-extrabold text-text-primary mb-8">Progress Dashboard</h1>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         {[
           {
@@ -80,13 +78,8 @@ const ProgressPage = () => {
           },
           {
             label: 'Longest Streak',
-            icon: <Trophy className="w-6 h-6 text-orange-400" />,
+            icon: <Trophy className="w-6 h-6 text-emerald-400" />,
             value: `${summary?.longestStreak ?? 0} days`,
-          }, 
-          {
-            label: 'Total Distance',
-            icon: <MapPin className="w-6 h-6 text-pink-400" />,
-            value: summary?.totalDistance ?? '0 km',
           },
         ].map((card, idx) => (
           <div
@@ -103,7 +96,6 @@ const ProgressPage = () => {
         ))}
       </div>
 
-      {/* Personal Bests */}
       <div className="bg-ui-cards p-6 rounded-2xl shadow-md border border-slate-700 hover:border-blue-500 hover:shadow-blue-500/30 transition duration-200">
         <h2 className="text-2xl font-bold text-text-primary mb-4">Personal Bests</h2>
 
