@@ -10,6 +10,7 @@ const authenticatedNavItems = [
   { path: '/workouts', name: 'Workouts' },
   { path: '/progress', name: 'Progress' },
   { path: '/profile', name: 'Profile' },
+  { path: '/about', name: 'About Us' },
 ];
 
 const publicNavItems = [];
