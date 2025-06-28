@@ -47,7 +47,7 @@ const teamMembers = [
     role: 'Core Collaborator',
     bio: 'Part of the hands-on development team that collaborated on all major features.',
     github: 'https://github.com/Ogendo-star',
-    email: '',
+    email: 'puroselah@gmail.com',
     avatar: 'https://ui-avatars.com/api/?name=Masela+Ogendo&background=14b8a6&color=fff'
   },
 ];
