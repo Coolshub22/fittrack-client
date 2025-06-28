@@ -12,6 +12,7 @@ import CreateWorkoutPage from './pages/CreateWorkoutPage.jsx';
 import EditWorkoutPage from './pages/EditWorkoutPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import ProgressPage from './pages/ProgressPage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
 
 
 
@@ -23,6 +24,7 @@ export const myRouter = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <RegisterPage /> },
+      { path: 'about', element: <AboutPage /> },
       {
         element: <ProtectedRoute />,
         children: [
