@@ -121,6 +121,13 @@ const DashboardPage = () => {
               {user.current_streak ?? 'N/A'} days
             </p>
 
+            <p className="text-lg text-text-secondary">
+              <span className="font-semibold text-text-primary">
+                Longest Streak:
+              </span>{' '}
+              {user.longest_streak ?? 'N/A'} days
+            </p>
+
             <div className="text-lg text-text-secondary">
               <span className="font-semibold text-text-primary">
                 Personal Bests:

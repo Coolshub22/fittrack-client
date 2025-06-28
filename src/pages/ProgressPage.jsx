@@ -79,6 +79,11 @@ const ProgressPage = () => {
             value: `${summary?.currentStreak ?? 0} days`,
           },
           {
+            label: 'Longest Streak',
+            icon: <Trophy className="w-6 h-6 text-orange-400" />,
+            value: `${summary?.longestStreak ?? 0} days`,
+          }, 
+          {
             label: 'Total Distance',
             icon: <MapPin className="w-6 h-6 text-pink-400" />,
             value: summary?.totalDistance ?? '0 km',
