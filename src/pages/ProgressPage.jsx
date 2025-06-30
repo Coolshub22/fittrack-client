@@ -4,6 +4,7 @@ import {
   Flame,
   Timer,
   BarChart3,
+  MapPin,
   Loader,
   Trophy,
 } from 'lucide-react';
