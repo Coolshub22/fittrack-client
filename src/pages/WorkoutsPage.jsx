@@ -7,33 +7,15 @@ import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-function ExerciseList({ workoutId }) {
-  const [exercises, setExercises] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        const res = await api.get('/exercises');
-        const filtered = res.data.filter(ex => ex.workout_id === workoutId);
-        setExercises(filtered);
-      } catch (err) {
-        setError("Failed to fetch exercises.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchExercises();
-  }, [workoutId]);
-
-  if (isLoading) return <div className="text-center p-4 text-text-secondary">Loading exercises...</div>;
-  if (error) return <div className="text-center p-4 text-red-500">{error}</div>;
-  if (exercises.length === 0) return <div className="text-center p-4 text-text-secondary">No exercises found for this workout.</div>;
+// ExerciseList now accepts 'workoutExercises' directly instead of fetching
+function ExerciseList({ workoutExercises }) {
+  if (!workoutExercises || workoutExercises.length === 0) {
+    return <div className="text-center p-4 text-text-secondary">No exercises found for this workout.</div>;
+  }
 
   return (
     <div className="space-y-3 p-4 bg-ui-cards">
-      {exercises.map(ex => (
+      {workoutExercises.map(ex => (
         <div key={ex.id} className="bg-ui-cards border border-slate-700 p-4 rounded-xl shadow-sm">
           <h5 className="text-lg font-semibold text-text-primary mb-2">{ex.name}</h5>
           <div className="flex flex-wrap items-center gap-3 text-text-secondary text-base">
@@ -47,7 +29,12 @@ function ExerciseList({ workoutId }) {
                 <span>Reps: {ex.reps || 0}</span>
               </>
             ) : (
+              // Display duration for non-strength exercises
               <span className="flex items-center"><Clock className="w-4 h-4 mr-1" />{ex.duration || 0} mins</span>
+            )}
+            {/* Display distance if available for any exercise type */}
+            {ex.supports_distance && ex.distance && (
+              <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" />{ex.distance} km</span>
             )}
           </div>
         </div>
@@ -72,6 +59,7 @@ export default function WorkoutsPage() {
         const userRes = await api.get('/profile');
         setCurrentUser(userRes.data);
         const workoutRes = await api.get('/workouts');
+        // The backend filters by user_id, so this filter might be redundant but harmless
         const userWorkouts = workoutRes.data.filter(w => w.user_id === userRes.data.id);
         const sorted = userWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
         setWorkouts(sorted);
@@ -125,7 +113,7 @@ export default function WorkoutsPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-extrabold text-text-primary">My Workouts</h1>
         <button
-        title='Create New Workout...'
+          title='Create New Workout...'
           onClick={() => navigate('/workouts/new')}
           className=" flex items-center gap-1 bg-accent hover:opacity-90 text-background font-bold py-1 px-2 rounded-lg transition-opacity duration-200 border-1"
         >
@@ -166,7 +154,8 @@ export default function WorkoutsPage() {
                 </div>
                 {isExpanded && (
                   <div className="border-t border-gray-200 dark:border-gray-700">
-                    <ExerciseList workoutId={workout.id} />
+                    {/* Pass the exercises array directly from the workout object */}
+                    <ExerciseList workoutExercises={workout.exercises} />
                   </div>
                 )}
               </div>
