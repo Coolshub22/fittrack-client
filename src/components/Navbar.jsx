@@ -10,6 +10,7 @@ const authenticatedNavItems = [
   { path: '/workouts', name: 'Workouts' },
   { path: '/progress', name: 'Progress' },
   { path: '/profile', name: 'Profile' },
+  { path: '/about', name: 'About Us' },
 ];
 
 const publicNavItems = [];
@@ -66,13 +67,13 @@ export default function Navbar() {
                 onClick={() => navigate('/login')}
                 className="px-4 py-2 text-gray-200 border border-gray-700 rounded hover:bg-gray-700"
               >
-                Login
+                Sign In
               </button>
               <button
                 onClick={() => navigate('/register')}
                 className="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600"
               >
-                Register
+                Sign Up
               </button>
             </>
           ) : (
