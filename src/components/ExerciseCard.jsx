@@ -5,11 +5,7 @@ export default function ExerciseCard({ exercise, onEdit, onDelete }) {
   const {
     id,
     name,
-    category,
-    muscleGroup,
-    equipment,
-    difficulty,
-    instructions,
+    type,
   } = exercise;
 
   return (
@@ -21,22 +17,9 @@ export default function ExerciseCard({ exercise, onEdit, onDelete }) {
         </div>
 
         <p className="text-sm text-gray-400 mb-1">
-          <span className="font-medium text-gray-300">Category:</span> {category}
+          <span className="font-medium text-gray-300">Type:</span> {type}
         </p>
-        <p className="text-sm text-gray-400 mb-1">
-          <span className="font-medium text-gray-300">Muscle:</span> {muscleGroup}
-        </p>
-        <p className="text-sm text-gray-400 mb-1">
-          <span className="font-medium text-gray-300">Equipment:</span> {equipment}
-        </p>
-        <p className="text-sm text-gray-400 mb-1">
-          <span className="font-medium text-gray-300">Difficulty:</span> {difficulty}
-        </p>
-
-        <p className="text-sm text-gray-300 mt-3">
-          <span className="font-medium text-gray-200">Instructions:</span><br />
-          {instructions}
-        </p>
+        
       </div>
 
       <div className="flex justify-end gap-3 mt-auto pt-2">

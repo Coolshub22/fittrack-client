@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import WorkoutForm from '../components/WorkoutForm';
+import WorkoutForm from '../components/WorkoutForm'; // Assuming WorkoutForm is in components folder
 import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
@@ -43,15 +43,11 @@ export default function EditWorkoutPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      {/* <h2 className="text-4xl font-bold text-center text-text-primary mb-8">
-        Edit Workout
-      </h2> */}
-      <p className='mb-2 font-semibold'>Edit your Workout & Exercise Info:</p>
+      <p className='mb-2 font-semibold text-text-primary'>Edit your Workout & Exercise Info:</p>
       {workout && (
         <WorkoutForm
-          initialData={workout}
+          initialData={workout} // Pass the fetched workout data here
           onSubmit={handleUpdateWorkout}
-          currentUser={{ id: workout.user_id }}
         />
       )}
     </div>

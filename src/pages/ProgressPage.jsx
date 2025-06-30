@@ -21,13 +21,14 @@ const ProgressPage = () => {
     const fetchProgress = async () => {
       try {
         const [progressRes, pbRes] = await Promise.all([
-          api.get('/progress'),
-          api.get('/personal-bests'),
+          api.get('/progress'), // Fetches summary data including streaks and specific PBs
+          api.get('/personal-bests'), // Fetches all personal best records
         ]);
         setSummary(progressRes.data);
         setPersonalBests(pbRes.data);
       } catch (error) {
         console.error('Error fetching progress or personal bests:', error);
+        // Optionally, set an error state to display to the user
       } finally {
         setLoading(false);
       }
@@ -88,6 +89,18 @@ const ProgressPage = () => {
             icon: <MapPin className="w-6 h-6 text-pink-400" />,
             value: summary?.totalDistance ?? '0 km',
           },
+          // Personal Best for Squat from summary
+          {
+            label: 'PB Squat',
+            icon: <Dumbbell className="w-6 h-6 text-gray-400" />,
+            value: summary?.personalBestSquat ?? 'N/A',
+          },
+          // Personal Best for Run from summary
+          {
+            label: 'Longest Run',
+            icon: <MapPin className="w-6 h-6 text-cyan-400" />,
+            value: summary?.longestRun ?? 'N/A',
+          },
         ].map((card, idx) => (
           <div
             key={idx}
@@ -103,9 +116,9 @@ const ProgressPage = () => {
         ))}
       </div>
 
-      {/* Personal Bests */}
+      {/* Personal Bests List (Detailed) */}
       <div className="bg-ui-cards p-6 rounded-2xl shadow-md border border-slate-700 hover:border-blue-500 hover:shadow-blue-500/30 transition duration-200">
-        <h2 className="text-2xl font-bold text-text-primary mb-4">Personal Bests</h2>
+        <h2 className="text-2xl font-bold text-text-primary mb-4">All Personal Bests</h2>
 
         {personalBests && personalBests.length > 0 ? (
           <ul className="list-disc list-inside space-y-2 text-text-secondary text-lg">
@@ -115,6 +128,8 @@ const ProgressPage = () => {
                 {pb.max_weight && `- ${pb.max_weight} kg`}
                 {pb.max_reps && `, ${pb.max_reps} reps`}
                 {pb.max_duration && `, ${pb.max_duration} min`}
+                {pb.max_distance && `, ${pb.max_distance} km`} {/* Added distance */}
+                {pb.date_achieved && ` (on ${new Date(pb.date_achieved).toLocaleDateString()})`} {/* Added date */}
               </li>
             ))}
           </ul>
