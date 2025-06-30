@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Heart, Trophy, Scale, Edit3 } from 'lucide-react';
 import ProfileForm from '../components/ProfileForm';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
-    id: 1,
-    name: '',
-    email: '',
-    phone: '',
-    age: 0,
-    location: '',
-    bio: '',
-    joinDate: new Date().toLocaleDateString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric'
-    }),
-    fitnessLevel: '',
-    achievements: 0,
-    favoriteWorkout: '',
-    startingWeight: 0,
-    avatar: '🏋️‍♂️'
+  
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('userProfile');
+    if (savedUser) {
+      return JSON.parse(savedUser);
+    }
+    return {
+      id: 1,
+      name: '',
+      email: '',
+      phone: '',
+      age: 0,
+      location: '',
+      bio: '',
+      joinDate: new Date().toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      }),
+      fitnessLevel: '',
+      achievements: 0,
+      favoriteWorkout: '',
+      startingWeight: 0,
+      avatar: '🏋️‍♂️'
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(user));
+  }, [user]);
 
   const handleEditUser = (updatedUser) => {
     setUser(updatedUser);

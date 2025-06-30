@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from 'react';
-import Navbar from './components/Navbar'; // Corrected path
+import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,7 +12,24 @@ function App() {
       <main className="p-4">
         <Outlet />
       </main>
-      <ToastContainer position='top-right' autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover draggable pauseOnFocusLoss />
+
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastClassName={() =>
+          "bg-gray-800 text-white rounded-lg shadow-lg p-4 font-medium"
+        }
+        bodyClassName={() => "text-sm"}
+        progressClassName="bg-green-500"
+      />
     </div>
   );
 }

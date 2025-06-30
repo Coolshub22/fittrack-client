@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { LogOut } from 'lucide-react';
+
+
 
 const authenticatedNavItems = [
   { path: '/dashboard', name: 'Dashboard' },
   { path: '/workouts', name: 'Workouts' },
   { path: '/progress', name: 'Progress' },
   { path: '/profile', name: 'Profile' },
+  { path: '/about', name: 'About Us' },
 ];
 
 const publicNavItems = [];
@@ -63,22 +67,20 @@ export default function Navbar() {
                 onClick={() => navigate('/login')}
                 className="px-4 py-2 text-gray-200 border border-gray-700 rounded hover:bg-gray-700"
               >
-                Login
+                Sign In
               </button>
               <button
                 onClick={() => navigate('/register')}
                 className="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600"
               >
-                Register
+                Sign Up
               </button>
             </>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-white border border-gray-700 rounded hover:bg-gray-700"
-            >
-              Logout
-            </button>
+            <button onClick={handleLogout} className="flex items-center p-3  gap-2 text-white-rounded hover:bg-gray-700 border-gray-700 rounded">
+             <LogOut size={18} />
+             Logout
+           </button>
           )}
         </div>
 
