@@ -5,6 +5,7 @@ import {
   Timer,
   MapPin,
   BarChart3,
+  MapPin,
   Loader,
   Trophy,
 } from 'lucide-react';
