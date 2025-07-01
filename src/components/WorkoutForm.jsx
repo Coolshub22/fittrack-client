@@ -1,6 +1,6 @@
 // Enhanced WorkoutForm with styling and functional improvements
 import React, { useState, useEffect } from "react";
-import { Dumbbell as DumbbellIcon, XCircle } from "lucide-react";
+import { Dumbbell as DumbbellIcon, XCircle,MapPin } from "lucide-react";
 import api from "../api/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
