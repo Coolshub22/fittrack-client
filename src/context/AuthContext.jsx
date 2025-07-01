@@ -5,16 +5,24 @@ import api from '../api/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('authToken'));
+  const getInitialToken = () =>
+    localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
+  const [token, setToken] = useState(getInitialToken());
   const [user, setUser] = useState(null);
 
-  const login = (newToken) => {
-    localStorage.setItem('authToken', newToken);
+  const login = (newToken, rememberMe = false) => {
+    if (rememberMe) {
+      localStorage.setItem('authToken', newToken);
+    } else {
+      sessionStorage.setItem('authToken', newToken);
+    }
     setToken(newToken);
   };
 
   const logout = () => {
     localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
     setToken(null);
     setUser(null);
   };
@@ -24,13 +32,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       if (!token) return;
-
       try {
         const res = await api.get('/profile');
         setUser(res.data);
       } catch (err) {
         console.error('Failed to fetch user profile:', err);
-        logout(); // Optionally log out on error
+        logout(); // Clear token on failure
       }
     };
 
