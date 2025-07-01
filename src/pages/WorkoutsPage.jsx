@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   PlusCircle, FileText, Trash2, Edit, ChevronDown,
-  Clock, Dumbbell as DumbbellIcon, Calendar, Plus
+  Clock, Dumbbell as DumbbellIcon, Calendar, Plus, MapPin
 } from 'lucide-react';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
