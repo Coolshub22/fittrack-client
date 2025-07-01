@@ -10,7 +10,7 @@ const api = axios.create({
    * which is the standard and most secure way to handle API endpoints.
    * A fallback to localhost:5000 is provided for local development.
    */
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000',
+  baseURL: import.meta.env.VITE_API_URL || 'https://fittrack-server-t2sv.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
