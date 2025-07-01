@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dumbbell, Edit, Trash2 } from 'lucide-react';
+import { Dumbbell, Edit, Trash2, MapPin } from 'lucide-react';
 
 export default function ExerciseCard({ exercise, onEdit, onDelete }) {
   const {
