@@ -47,7 +47,7 @@ export default function LoginPage() {
         localStorage.removeItem('savedUsername');
       }
 
-      login(access_token);
+      login(access_token, formData.rememberMe);
       navigate('/dashboard');
     } catch (err) {
       console.log('Login error', err.response?.data || err.message);

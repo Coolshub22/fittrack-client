@@ -7,7 +7,6 @@ import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import WorkoutsPage from './pages/WorkoutsPage.jsx';
-import WorkoutDetailPage from './pages/WorkoutDetailPage.jsx';
 import CreateWorkoutPage from './pages/CreateWorkoutPage.jsx';
 import EditWorkoutPage from './pages/EditWorkoutPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
@@ -32,7 +31,6 @@ export const myRouter = createBrowserRouter([
           { path: 'workouts', element: <WorkoutsPage /> },
           { path: 'workouts/new', element: <CreateWorkoutPage /> },
           { path: 'workouts/edit/:id', element: <EditWorkoutPage /> },
-          { path: 'workouts/:id', element: <WorkoutDetailPage /> },
           { path: 'profile', element: <ProfilePage /> },
           { path: 'progress', element: <ProgressPage /> },
         ],

@@ -3,6 +3,7 @@ import {
   Dumbbell,
   Flame,
   Timer,
+  MapPin,
   BarChart3,
   MapPin,
   Loader,

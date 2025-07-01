@@ -25,7 +25,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Retrieve the token from localStorage (or your preferred storage)
-    const token = localStorage.getItem('authToken'); 
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     
     if (token) {
       // If the token exists, add it to the request headers
@@ -36,6 +36,17 @@ api.interceptors.request.use(
   },
   (error) => {
     // Handle any errors that occur during request setup
+    return Promise.reject(error);
+  }
+);
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
+      window.location.href = '/'; // or '/login'
+    }
     return Promise.reject(error);
   }
 );
